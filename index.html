@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Story Builder</title>
+  <style>
+    /* Include the CSS from the previous section here */
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Winwheel.js/2.7.0/Winwheel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
+</head>
+<body>
+  <h1>Random Story Builder</h1>
+  
+  <div class="wheels">
+    <canvas id="wheelCharacter" width="200" height="200"></canvas>
+    <canvas id="wheelSetting" width="200" height="200"></canvas>
+    <canvas id="wheelGoal" width="200" height="200"></canvas>
+    <canvas id="wheelConflict" width="200" height="200"></canvas>
+    <canvas id="wheelTwist" width="200" height="200"></canvas>
+  </div>
+
+  <button id="spinButton">Spin All Wheels</button>
+
+  <div id="storyContainer"></div>
+
+  <script>
+    // Initialize all wheels as shown previously
+    const wheelCharacter = new Winwheel({
+      'canvasId': 'wheelCharacter',
+      'numSegments': 5,
+      'segments': [
+        { 'fillStyle': '#eae56f', 'text': 'Wizard' },
+        { 'fillStyle': '#89f26e', 'text': 'Detective' },
+        { 'fillStyle': '#7de6ef', 'text': 'Alien' },
+        { 'fillStyle': '#e7706f', 'text': 'Knight' },
+        { 'fillStyle': '#eae56f', 'text': 'Robot' }
+      ],
+      'animation': {
+        'type': 'spinToStop',
+        'duration': 5,
+        'spins': 8,
+        'callbackFinished': 'handleSpinFinished()'
+      }
+    });
+
+    // Initialize other wheels (wheelSetting, wheelGoal, etc.) similarly
+
+    // Example for wheelSetting
+    const wheelSetting = new Winwheel({
+      'canvasId': 'wheelSetting',
+      'numSegments': 5,
+      'segments': [
+        { 'fillStyle': '#eae56f', 'text': 'Ancient Castle' },
+        { 'fillStyle': '#89f26e', 'text': 'Futuristic City' },
+        { 'fillStyle': '#7de6ef', 'text': 'Enchanted Forest' },
+        { 'fillStyle': '#e7706f', 'text': 'Deserted Island' },
+        { 'fillStyle': '#eae56f', 'text': 'Space Station' }
+      ],
+      'animation': {
+        'type': 'spinToStop',
+        'duration': 5,
+        'spins': 8,
+        'callbackFinished': 'handleSpinFinished()'
+      }
+    });
+
+    // Repeat for wheelGoal, wheelConflict, wheelTwist
+
+    document.getElementById('spinButton').addEventListener('click', () => {
+      wheelCharacter.startAnimation();
+      wheelSetting.startAnimation();
+      // Start other wheels similarly
+    });
+
+    let selectedElements = {};
+
+    function handleSpinFinished() {
+      // Ensure all wheels have stopped before generating the story
+      // This example assumes synchronous spins; for asynchronous, implement checks
+      selectedElements.character = wheelCharacter.getIndicatedSegment().text;
+      selectedElements.setting = wheelSetting.getIndicatedSegment().text;
+      // Collect other elements similarly
+
+      generateStory(selectedElements);
+    }
+
+    function generateStory(elements) {
+      const story = `
+        Once upon a time, there was a ${elements.character} living in a ${elements.setting}.
+        Their goal was to ${elements.goal}. However, they faced ${elements.conflict}.
+        In an unexpected twist, ${elements.twist}.
+        And so, their adventure unfolded with courage and determination.
+      `;
+      displayStory(story);
+    }
+
+    function displayStory(story) {
+      const storyContainer = document.getElementById('storyContainer');
+      storyContainer.innerText = story;
+    }
+  </script>
+</body>
+</html>
